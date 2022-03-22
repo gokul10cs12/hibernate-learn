@@ -12,17 +12,4 @@ public class HibernateLearnApplication {
         SpringApplication.run(HibernateLearnApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner commandLineRunner(StudentRepository studentRepository){
-        return args -> {
-            Student gokul =new Student(
-                    "Gokul",
-                    "N.B",
-                    "abc@abc.com",
-                    27
-            );
-            studentRepository.save(gokul);
-        };
-    }
-
 }

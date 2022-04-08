@@ -22,13 +22,13 @@ public class DataInitializer implements CommandLineRunner {
 
         bookRepository.deleteAll();
 
-        Book myBook = new Book("Gokul's book", "123-213123", "Penguin");
+        Book myBook = new Book("Gokul's book", "123-213123", "Penguin", null);
         Book saveMyBook= bookRepository.save(myBook); // this saved object will have the Id properly generated.
 
 //        System.out.println("The Id--->" + saveMyBook.getId());
 
 
-        Book myNewBook = new Book("Rand's book", "123-213123", "Penguin");
+        Book myNewBook = new Book("Rand's book", "123-213123", "Penguin", null);
         Book savedNewBook = bookRepository.save(myNewBook);
 //        System.out.println("The 2nd Id--->" + savedNewBook.getId());
 

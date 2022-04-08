@@ -85,4 +85,11 @@ public class Book {
         this.publisher = publisher;
     }
 
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
 }

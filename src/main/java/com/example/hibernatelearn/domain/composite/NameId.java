@@ -3,7 +3,7 @@ package com.example.hibernatelearn.domain.composite;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-@Embeddable
+@Embeddable //@Embeddable annotation to declare that a class is meant to be embedded by other entities.
 public class NameId implements Serializable {
 
     private String firstName;

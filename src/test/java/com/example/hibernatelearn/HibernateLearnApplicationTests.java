@@ -16,7 +16,8 @@ class HibernateLearnApplicationTests {
     @Test
     void testBookRepository(){
         long count = bookRepository.count();
-        assertThat(count).isGreaterThan(1);
+
+        assertThat(count).isGreaterThan(0);
     }
 
 

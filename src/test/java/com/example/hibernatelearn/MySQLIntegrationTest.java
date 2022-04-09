@@ -1,5 +1,12 @@
 package com.example.hibernatelearn;
 
+import com.example.hibernatelearn.domain.BookNatural;
+import com.example.hibernatelearn.domain.composite.AuthorComposite;
+import com.example.hibernatelearn.domain.composite.AuthorEmbedded;
+import com.example.hibernatelearn.domain.composite.NameId;
+import com.example.hibernatelearn.repositories.AuthorCompositeRepository;
+import com.example.hibernatelearn.repositories.AuthorEmbeddedRepository;
+import com.example.hibernatelearn.repositories.BookNaturalRepository;
 import com.example.hibernatelearn.repositories.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +31,55 @@ public class MySQLIntegrationTest {
     @Autowired
     BookRepository bookRepository;
 
+    @Autowired
+    BookNaturalRepository bookNaturalRepository;
+
+    @Autowired
+    AuthorCompositeRepository authorCompositeRepository;
+
+    @Autowired
+    AuthorEmbeddedRepository authorEmbeddedRepository;
+
+    @Test
+    void authorEmbeddedTest(){
+        NameId nameId= new NameId("Map", "NB");
+        AuthorEmbedded authorEmbedded =new AuthorEmbedded(nameId);
+
+        assertThat(authorEmbedded.getNameId()).isNotNull();
+
+        AuthorEmbedded authorEmbeddedResponse = authorEmbeddedRepository.save(authorEmbedded);
+        assertThat(authorEmbeddedResponse).isNotNull();
+        AuthorEmbedded fetched = authorEmbeddedRepository.getById(nameId);
+        assertThat(fetched).isNotNull();
+
+    }
+
+
+    @Test
+    void authorCompositeTest(){
+        NameId nameId = new NameId("Gokul", "NB");
+        AuthorComposite authorComposite = new AuthorComposite();
+        authorComposite.setFirstName(nameId.getFirstName());
+        authorComposite.setLastName(nameId.getLastName());
+        authorComposite.setCountry("India");
+
+        AuthorComposite savedDataResponse = authorCompositeRepository.save(authorComposite);
+        assertThat(savedDataResponse).isNotNull();
+
+        AuthorComposite fetched = authorCompositeRepository.getById(nameId); // calling by type nameId.
+        assertThat(fetched).isNotNull();
+
+    }
+
+    @Test
+    void bookNaturalTest(){
+        BookNatural bookNatural= new BookNatural();
+        bookNatural.setTitle("MyTitle");
+        BookNatural bookNatural1 = bookNaturalRepository.save(bookNatural);
+        BookNatural fetched = bookNaturalRepository.getById(bookNatural1.getTitle());
+        assertThat(fetched).isNotNull();
+
+    }
 
     @Test
     void testMySQL(){

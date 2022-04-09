@@ -22,8 +22,8 @@ import java.util.Objects;
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String title;
     private String isbn;
     private String publisher;
@@ -53,7 +53,7 @@ public class Book {
         return Objects.hash(id);
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

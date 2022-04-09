@@ -25,19 +25,23 @@ public class SpringBootJpaTestSplice {
     @Autowired
     BookRepository bookRepository;
 
-    @Commit //make the transaction persist after execution of the test
-    @Order(1) //test order
+    @Commit
+    @Order(1)
     @Test
-    void testJpaTestSplice(){
+    void testJpaTestSplice() {
         long countBefore = bookRepository.count();
-        bookRepository.save(new Book("Name", "isbn", "hehe", null));
-        assertThat(countBefore + 1).isEqualTo(3);
+        assertThat(countBefore).isEqualTo(2);
+
+        bookRepository.save(new Book("My Book", "1235555", "Self", null));
+
+        long countAfter = bookRepository.count();
+
+        assertThat(countBefore).isLessThan(countAfter);
     }
 
-    @Rollback(value = false) // not  rollback, make the transaction persist after execution of the test
     @Order(2)
     @Test
-    void testJpaTestSpliceTransaction(){
+    void testJpaTestSpliceTransaction() {
         long countBefore = bookRepository.count();
         assertThat(countBefore).isEqualTo(3);
     }

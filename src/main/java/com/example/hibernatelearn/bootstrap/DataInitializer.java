@@ -1,8 +1,11 @@
 package com.example.hibernatelearn.bootstrap;
 
+import com.example.hibernatelearn.domain.AuthorUuid;
 import com.example.hibernatelearn.domain.Book;
+import com.example.hibernatelearn.domain.BookUuid;
+import com.example.hibernatelearn.repositories.AuthorUuidRepository;
 import com.example.hibernatelearn.repositories.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.hibernatelearn.repositories.BookUuidRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -12,9 +15,13 @@ import org.springframework.stereotype.Component;
 public class DataInitializer implements CommandLineRunner {
 
     private final BookRepository bookRepository;
+    private final AuthorUuidRepository authorUuidRepository;
+    private final BookUuidRepository bookUuidRepository;
 
-    public DataInitializer(BookRepository bookRepository) {
+    public DataInitializer(BookRepository bookRepository, AuthorUuidRepository authorUuidRepository, BookUuidRepository bookUuidRepository) {
         this.bookRepository = bookRepository;
+        this.authorUuidRepository = authorUuidRepository;
+        this.bookUuidRepository = bookUuidRepository;
     }
 
     @Override
@@ -36,6 +43,19 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Book id-->" + book.getId() + ", Book name" + book.getTitle());
             System.out.println();
         });
+
+        AuthorUuid authorUuid1 = new AuthorUuid();
+        authorUuid1.setFirstName("myName");
+        authorUuid1.setLastName("yourName");
+        AuthorUuid authorUuidResponse = authorUuidRepository.save(authorUuid1);
+        System.out.println("the generated uuid=" + authorUuidResponse.getId());
+
+        BookUuid bookUuid = new BookUuid();
+        bookUuid.setTitle("Gokul's Dream world");
+        bookUuid.setPublisher("penguine");
+        BookUuid bookUuidResponse = bookUuidRepository.save(bookUuid);
+        System.out.println("the generated uuid before bytes=" + bookUuidResponse.getId());
+
 
     }
 }

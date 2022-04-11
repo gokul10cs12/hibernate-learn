@@ -126,7 +126,7 @@ public class BookDaoImpl implements BookDao {
             ps.setString(1, book.getIsbn());
             ps.setString(2, book.getPublisher());
             ps.setString(3, book.getTitle());
-            ps.setLong(4, book.getAuthorId());
+//            ps.setLong(4, book.getAuthorId());
             ps.setLong(5, book.getId());
             ps.execute();
 
@@ -172,7 +172,7 @@ public class BookDaoImpl implements BookDao {
         book.setTitle(resultSet.getString(4));
 
 
-        book.setAuthorId(authorDao.getById(resultSet.getLong(5)));
+//        book.setAuthorId(authorDao.getById(resultSet.getLong(5)));
 
         return book;
     }

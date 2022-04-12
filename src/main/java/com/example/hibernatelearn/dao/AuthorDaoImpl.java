@@ -22,21 +22,40 @@ public class AuthorDaoImpl implements AuthorDao {
 
     @Override
     public Author getAuthorByName(String firstName, String lastName) {
-        return null;
+        return jdbcTemplate.queryForObject(
+                "select * from author where first_name=? and last_name=?",
+                getRawMapper(),
+                firstName,
+                lastName
+        );
     }
 
     @Override
     public Author saveNewAuthor(Author author) {
-        return null;
+        jdbcTemplate.update(
+                "insert into author (first_name, last_name) value (?,?)",
+                author.getFirstName(),
+                author.getLastName()
+        );
+
+        Long newUserId = jdbcTemplate.queryForObject("select last_insert_id()", Long.class);
+        return this.getById(newUserId);
     }
 
     @Override
     public Author updateAuthor(Author author) {
-        return null;
+        jdbcTemplate.update(
+                "update author set first_name=?, last_name=? where id=?",
+                author.getFirstName(),
+                author.getLastName(),
+                author.getId()
+                );
+        return this.getById(author.getId());
     }
 
     @Override
     public void deleteAuthorById(Long id) {
+        jdbcTemplate.update("delete from author where id= ?", id);
 
     }
 

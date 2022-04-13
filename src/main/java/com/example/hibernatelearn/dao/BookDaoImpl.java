@@ -14,6 +14,9 @@ public class BookDaoImpl implements BookDao {
     }
 
 
+    //revisit the left outer join implementation
+
+
     @Override
     public Book getById(Long id) {
         return jdbcTemplate.queryForObject("select * from book where id= ?", getBookRowMapper(), id);

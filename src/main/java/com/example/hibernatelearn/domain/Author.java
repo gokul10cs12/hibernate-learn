@@ -1,9 +1,7 @@
 package com.example.hibernatelearn.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +11,8 @@ public class Author {
     private Long id;
     private String firstName;
     private String lastName;
+    @Transient
+    private List<Book> books;
 
     public Author(String firstName, String lastName) {
         this.firstName = firstName;
@@ -45,6 +45,14 @@ public class Author {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 
     @Override

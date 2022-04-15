@@ -11,9 +11,6 @@ public class Author {
     private Long id;
     private String firstName;
     private String lastName;
-    @Transient
-    private List<Book> books;
-
     public Author(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -45,14 +42,6 @@ public class Author {
 
     public String getLastName() {
         return lastName;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
     }
 
     @Override

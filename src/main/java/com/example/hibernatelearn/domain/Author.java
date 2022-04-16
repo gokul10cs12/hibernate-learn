@@ -4,6 +4,11 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@NamedQueries({
+        @NamedQuery(name = "find_by_first_name", query = "from Author a where a.firstName= :first_name"),
+        @NamedQuery(name ="author_find_all", query = "from Author")
+})
+
 @Entity
 public class Author {
     @Id

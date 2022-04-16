@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.lang.reflect.Type;
 
 @Component
 public class BookDaoImpl implements BookDao {
@@ -14,6 +16,20 @@ public class BookDaoImpl implements BookDao {
 
     public BookDaoImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+    }
+
+    @Override
+    public Book findByISBN(String isbn) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Book> query = em.createQuery("select a from Book a where a.isbn = :isbn", Book.class);
+            query.setParameter("isbn", isbn);
+
+            Book book = query.getSingleResult();
+            return book;
+        }finally {
+            em.close();
+        }
     }
 
     @Override

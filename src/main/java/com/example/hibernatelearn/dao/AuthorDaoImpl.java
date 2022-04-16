@@ -5,7 +5,9 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Component
 public class AuthorDaoImpl implements AuthorDao {
@@ -14,6 +16,48 @@ public class AuthorDaoImpl implements AuthorDao {
 
     public AuthorDaoImpl(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
+    }
+
+
+    @Override
+    public Author findByFirstName(String firstName) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Author> query = em.createNamedQuery("find_by_first_name", Author.class);
+            query.setParameter("first_name", firstName);
+            return query.getSingleResult();
+        }finally {
+            em.close();
+        }
+    }
+
+    /*
+    * Using by Named query , query and name of the query are defined in the entity level  , i.e Author class.
+    * */
+    @Override
+    public List<Author> findAll() {
+
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Author> typedQuery = em.createNamedQuery("author_find_all", Author.class);
+            return typedQuery.getResultList();
+
+        }finally {
+            em.close();
+        }
+    }
+
+    @Override
+    public List<Author> listAuthorByLastNameLik(String lastName) {
+        EntityManager em =getEntityManager();
+        try{
+            Query query = em.createQuery("select a from Author a where a.lastName like :last_name");
+            query.setParameter("last_name", lastName + "%");
+//            List<Author> authors = query.getResultList();
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
     }
 
     @Override

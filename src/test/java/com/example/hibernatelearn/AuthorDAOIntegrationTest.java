@@ -12,6 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -28,7 +30,45 @@ public class AuthorDAOIntegrationTest {
     BookDao bookDao;
 
     @Test
-    void deleteBookRecordById(){
+    void testFindByFirstName(){
+        Author author = new Author();
+        author.setFirstName("Sam");
+        author.setLastName("Smith");
+        Author savedAuthor = authorDao.saveNewAuthor(author);
+        Author foundAuthor = authorDao.findByFirstName(savedAuthor.getFirstName());
+        assertThat(foundAuthor.getFirstName()).isEqualTo(savedAuthor.getFirstName());
+    }
+
+    @Test
+    void testFindAllAuthors(){
+        List<Author> authors= authorDao.findAll();
+        assertThat(authors.size()).isGreaterThan(1);
+    }
+
+    @Test
+    void testFindByISBN(){
+        Book book = new Book();
+        book.setIsbn("abc");
+        book.setAuthorId(12L);
+        book.setPublisher("penguin");;
+        book.setTitle("Valley Of Fear");
+
+        Book savedBook = bookDao.saveNewBook(book);
+        Book findBookByISBN = bookDao.findByISBN(savedBook.getIsbn());
+
+        assertThat(findBookByISBN.getIsbn()).isEqualTo(book.getIsbn());
+
+    }
+
+    @Test
+    void testListAuthorByLastNameLik(){
+        List<Author> authors = authorDao.listAuthorByLastNameLik("Will");
+        assertThat(authors.get(0).getLastName()).isEqualTo("Will");
+        assertThat(authors.size()).isGreaterThan(0);
+    }
+
+    @Test
+    void testDeleteBookRecordById(){
         Book newBook = new Book(
                 "thisIsIt",
                 "The killer",

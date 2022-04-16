@@ -3,6 +3,8 @@ package com.example.hibernatelearn.dao;
 import com.example.hibernatelearn.domain.Book;
 
 public interface BookDao {
+
+    Book findByISBN(String isbn);
     Book getById(Long id);
 
     Book findBookByTitle(String title);

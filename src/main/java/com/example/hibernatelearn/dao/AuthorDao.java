@@ -2,7 +2,14 @@ package com.example.hibernatelearn.dao;
 
 import com.example.hibernatelearn.domain.Author;
 
+import java.util.List;
+
 public interface AuthorDao {
+
+    Author findByFirstName(String firstName);
+
+    List<Author> findAll();
+    List<Author> listAuthorByLastNameLik(String lastName);
 
     Author getById(Long id);
     Author getAuthorByName(String firstName, String lastName);

@@ -30,6 +30,18 @@ public class AuthorDAOIntegrationTest {
     BookDao bookDao;
 
     @Test
+    void testAuthorByNameNative(){
+        Author author =authorDao.findAuthorByNameNative("Sam", "Smith");
+        assertThat(author.getFirstName()).isEqualTo("Sam");
+    }
+
+    @Test
+    void testAuthorByNameCriteria(){
+        Author author =authorDao.findAuthorByNameCriteria("Sam", "Smith");
+        assertThat(author.getFirstName()).isEqualTo("Sam");
+    }
+
+    @Test
     void testFindByFirstName(){
         Author author = new Author();
         author.setFirstName("Sam");
@@ -50,7 +62,7 @@ public class AuthorDAOIntegrationTest {
         Book book = new Book();
         book.setIsbn("abc");
         book.setAuthorId(12L);
-        book.setPublisher("penguin");;
+        book.setPublisher("penguin");
         book.setTitle("Valley Of Fear");
 
         Book savedBook = bookDao.saveNewBook(book);

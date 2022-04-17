@@ -6,6 +6,10 @@ import java.util.List;
 
 public interface AuthorDao {
 
+    Author findAuthorByNameNative(String firstName, String lastName);
+
+    Author findAuthorByNameCriteria(String firstName, String lastName);
+
     Author findByFirstName(String firstName);
 
     List<Author> findAll();

@@ -1,12 +1,11 @@
 package com.example.hibernatelearn.dao;
 
 import com.example.hibernatelearn.domain.Author;
+import com.example.hibernatelearn.domain.Book;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Component
@@ -18,6 +17,52 @@ public class AuthorDaoImpl implements AuthorDao {
         this.entityManagerFactory = entityManagerFactory;
     }
 
+
+    @Override
+    public Author findAuthorByNameNative(String firstName, String lastName) {
+        EntityManager em = getEntityManager();
+
+        try {
+            Query query = em.createNativeQuery("SELECT * from author a where a.first_name =? and a.last_name =?", Author.class);
+
+            query.setParameter(1, firstName);
+            query.setParameter(2, lastName);
+
+            return (Author) query.getSingleResult();
+        } finally {
+            em.close();
+        }
+
+    }
+
+    @Override
+    public Author findAuthorByNameCriteria(String firstName, String lastName) {
+        EntityManager em = getEntityManager();
+
+        try {
+            CriteriaBuilder criteriaBuilder = getEntityManager().getCriteriaBuilder();
+            CriteriaQuery<Author> criteriaQuery = criteriaBuilder.createQuery(Author.class);
+
+            Root<Author> root = criteriaQuery.from(Author.class);
+
+            ParameterExpression<String> firstNameParam = criteriaBuilder.parameter(String.class);
+            ParameterExpression<String> lastNameParam = criteriaBuilder.parameter(String.class);
+
+            Predicate firstNamePred = criteriaBuilder.equal(root.get("firstName"), firstNameParam);
+            Predicate lastNamePred = criteriaBuilder.equal(root.get("lastName"), lastNameParam);
+
+            criteriaQuery.select(root).where(criteriaBuilder.and(firstNamePred, lastNamePred));
+
+            TypedQuery<Author> typedQuery = em.createQuery(criteriaQuery);
+            typedQuery.setParameter(firstNameParam, firstName);
+            typedQuery.setParameter(lastNameParam, lastName);
+
+            return typedQuery.getSingleResult();
+        } finally {
+            em.close();
+        }
+
+    }
 
     @Override
     public Author findByFirstName(String firstName) {

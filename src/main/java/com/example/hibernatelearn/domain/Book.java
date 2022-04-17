@@ -1,10 +1,8 @@
 package com.example.hibernatelearn.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@NamedQuery(name = "Book.jpaNamed", query = "from Book b where b.title = :title")
 @Entity
 public class Book {
 

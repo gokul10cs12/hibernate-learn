@@ -3,15 +3,13 @@ package com.example.hibernatelearn.dao;
 import com.example.hibernatelearn.domain.Book;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
-public class BookDaoImpl implements BookDao {
+public class BookJdbcTemplate implements BookDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public BookDaoImpl(JdbcTemplate jdbcTemplate) {
+    public BookJdbcTemplate(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -21,12 +19,12 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> findAllBooks(int pageSize, int offset) {
-        return null;
+        return jdbcTemplate.query("select * from book limit ? offset ?", getBookRowMapper(), pageSize, offset);
     }
 
     @Override
     public List<Book> findAllBook() {
-        return null;
+        return jdbcTemplate.query("SELECT * from book", getBookRowMapper());
     }
 
     @Override

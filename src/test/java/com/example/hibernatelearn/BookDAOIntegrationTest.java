@@ -2,15 +2,20 @@ package com.example.hibernatelearn;
 
 import com.example.hibernatelearn.dao.AuthorDao;
 import com.example.hibernatelearn.dao.BookDao;
+import com.example.hibernatelearn.dao.BookJdbcTemplate;
 import com.example.hibernatelearn.domain.Author;
 import com.example.hibernatelearn.domain.Book;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,13 +24,50 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DataJpaTest
 @ComponentScan(basePackages = {"package com.example.hibernatelearn.dao"} )
 @AutoConfigureTestDatabase(replace =  AutoConfigureTestDatabase.Replace.NONE)
-public class AuthorDAOIntegrationTest {
+public class BookDAOIntegrationTest {
 
-    @Autowired
     AuthorDao authorDao;
 
-    @Autowired
     BookDao bookDao;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @BeforeEach
+    void setUp(){
+        bookDao = new BookJdbcTemplate(jdbcTemplate);
+    }
+
+    @Test
+    void testFindAllBooksPage(){
+        List<Book> books = bookDao.findAllBooks(2,0);
+        assertThat(books).isNotNull();
+        assertThat(books.size()).isEqualTo(2);
+    }
+
+    @Test
+    void testFindAllBooksPageTwo(){
+        List<Book> books = bookDao.findAllBooks(2,2);
+        assertThat(books).isNotNull();
+        assertThat(books.size()).isEqualTo(2);
+    }
+
+    @Test
+    void testFindAllBooksPageThree(){
+        List<Book> books = bookDao.findAllBooks(2,12);
+        assertThat(books).isNotNull();
+        assertThat(books.size()).isEqualTo(0); // if the offset value exceeds that actual records.
+    }
+
+
+
+    @Test
+    void testFindAllBooks(){
+        List<Book> book = bookDao.findAllBook();
+        assertThat(book).isNotNull();
+        assertThat(book.size()).isGreaterThan(1);
+    }
+
 
     @Test
     void deleteBookRecordById(){
@@ -41,6 +83,7 @@ public class AuthorDAOIntegrationTest {
         assertThrows(EmptyResultDataAccessException.class, () -> bookDao.getById(newBookResponse.getId()));
 
     }
+
 
     @Test
     void testUpdateBookDetails(){

@@ -19,10 +19,12 @@ public class BookDaoHibernate implements BookDao {
     @Override
     public List<Book> findAllBooksSortByTitle(Pageable pageable) {
         EntityManager em = getEntityManager();
+        String hql = "Select b from Book b order by b.title "+ pageable.getSort()
+                .getOrderFor("title").getDirection().name();
         try{
-            TypedQuery<Book> query = em.createQuery("Select b from Book b", Book.class);
-            query.setFirstResult(Math.toIntExact(pageable.getOffset()));
-            query.setMaxResults(pageable.getPageSize());
+            TypedQuery<Book> query = em.createQuery(hql, Book.class);
+            query.setFirstResult((int) pageable.getOffset()); // setting the offset.
+            query.setMaxResults(pageable.getPageSize()); // setting the page size.
             return query.getResultList();
         }finally {
             em.close();
@@ -31,7 +33,16 @@ public class BookDaoHibernate implements BookDao {
 
     @Override
     public List<Book> findAllBooks(Pageable pageable) {
-        return null;
+        EntityManager em = getEntityManager();
+
+        try{
+            TypedQuery<Book> query = em.createQuery("Select b from Book b", Book.class);
+            query.setFirstResult((int) pageable.getOffset()); // setting the offset.
+            query.setMaxResults(pageable.getPageSize()); // setting the page size.
+            return query.getResultList();
+        }finally {
+            em.close();
+        }
     }
 
     @Override

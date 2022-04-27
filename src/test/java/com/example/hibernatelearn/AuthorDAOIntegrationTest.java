@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.persistence.EntityManager;
@@ -31,6 +32,7 @@ public class AuthorDAOIntegrationTest {
     @Autowired
     AuthorDao authorDao;
 
+    @Autowired
     EntityManagerFactory entityManagerFactory;
 
     BookDao bookDao;
@@ -39,12 +41,21 @@ public class AuthorDAOIntegrationTest {
     void setUp(){
         bookDao = new BookDaoHibernate(entityManagerFactory);
     }
+
+    @Test
+    void testFindBooksSortByTitle(){
+        List<Book> books = bookDao.findAllBooksSortByTitle(PageRequest.of(0, 7,
+                Sort.by(Sort.Order.desc("title"))));
+        assertThat(books.size()).isNotNull();
+        assertThat(books.size()).isEqualTo(7);
+    }
+
+
     @Test
     void testFindBooksByTitle(){
         List<Book> books = bookDao.findAllBooks(PageRequest.of(0, 2));
         assertThat(books.size()).isNotNull();
         assertThat(books.size()).isEqualTo(2);
-
     }
 
     @Test

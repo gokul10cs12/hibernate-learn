@@ -1,6 +1,7 @@
 package com.example.hibernatelearn.dao;
 
 import com.example.hibernatelearn.domain.Book;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -15,6 +16,20 @@ public class BookJdbcTemplate implements BookDao {
 
 
     //revisit the left outer join implementation
+
+
+    @Override
+    public List<Book> findAllBookSortByTitle(Pageable pageable) {
+        String sql = "SELECT * FROM book order by title " + pageable.getSort().getOrderFor("title").getDirection().name()
+                +" limit ? offset ?";
+        System.out.println(sql + "gokul --->");
+        return jdbcTemplate.query(sql, getBookRowMapper(), pageable.getPageSize(), pageable.getOffset());
+    }
+
+    @Override
+    public List<Book> findAllBook(Pageable pageable) {
+        return jdbcTemplate.query("select * from Book limit ? offset ?", getBookRowMapper(), pageable.getPageSize(), pageable.getOffset());
+    }
 
 
     @Override

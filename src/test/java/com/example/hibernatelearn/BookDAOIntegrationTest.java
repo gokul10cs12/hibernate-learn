@@ -12,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -37,6 +39,47 @@ public class BookDAOIntegrationTest {
     void setUp(){
         bookDao = new BookJdbcTemplate(jdbcTemplate);
     }
+
+
+    /*
+     *  with pageable sort amd page, size settings.
+     * */
+    @Test
+    void testFindAllBooksPage_SortByTitlePageable(){
+        List<Book> books = bookDao.findAllBookSortByTitle(PageRequest.of(0,2,
+                Sort.by(Sort.Order.asc("title"))
+        ));
+        assertThat(books).isNotNull();
+        assertThat(books.size()).isEqualTo(2);
+    }
+
+
+    @Test
+    void testFindAllBooksPagePageable(){
+        List<Book> books = bookDao.findAllBook(PageRequest.of(0,2));
+        assertThat(books).isNotNull();
+        assertThat(books.size()).isEqualTo(2);
+    }
+
+    @Test
+    void testFindAllBooksPageTwoPageable(){
+        List<Book> books = bookDao.findAllBook(PageRequest.of(1,2));
+        assertThat(books).isNotNull();
+        assertThat(books.size()).isEqualTo(2);
+    }
+
+    @Test
+    void testFindAllBooksPageThreePageable(){
+        List<Book> books = bookDao.findAllBook(PageRequest.of(2,30));
+        assertThat(books).isNotNull();
+        assertThat(books.size()).isEqualTo(0); // if the offset value exceeds that actual records.
+    }
+
+
+
+/*
+*  normal page offset implementation
+* */
 
     @Test
     void testFindAllBooksPage(){

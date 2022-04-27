@@ -1,6 +1,7 @@
 package com.example.hibernatelearn.dao;
 
 import com.example.hibernatelearn.domain.Book;
+import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,16 @@ public class BookDaoImpl implements BookDao {
 
     //revisit the left outer join implementation
 
+
+    @Override
+    public List<Book> findAllBookSortByTitle(Pageable pageable) {
+        return null;
+    }
+
+    @Override
+    public List<Book> findAllBook(Pageable pageable) {
+        return null;
+    }
 
     @Override
     public List<Book> findAllBooks(int pageSize, int offset) {

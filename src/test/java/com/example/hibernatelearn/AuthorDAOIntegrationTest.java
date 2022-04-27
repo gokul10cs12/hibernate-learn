@@ -2,16 +2,21 @@ package com.example.hibernatelearn;
 
 import com.example.hibernatelearn.dao.AuthorDao;
 import com.example.hibernatelearn.dao.BookDao;
+import com.example.hibernatelearn.dao.BookDaoHibernate;
 import com.example.hibernatelearn.domain.Author;
 import com.example.hibernatelearn.domain.Book;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -26,8 +31,21 @@ public class AuthorDAOIntegrationTest {
     @Autowired
     AuthorDao authorDao;
 
-    @Autowired
+    EntityManagerFactory entityManagerFactory;
+
     BookDao bookDao;
+
+    @BeforeEach
+    void setUp(){
+        bookDao = new BookDaoHibernate(entityManagerFactory);
+    }
+    @Test
+    void testFindBooksByTitle(){
+        List<Book> books = bookDao.findAllBooks(PageRequest.of(0, 2));
+        assertThat(books.size()).isNotNull();
+        assertThat(books.size()).isEqualTo(2);
+
+    }
 
     @Test
     void testAuthorByNameNative(){

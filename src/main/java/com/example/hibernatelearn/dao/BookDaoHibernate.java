@@ -2,26 +2,31 @@ package com.example.hibernatelearn.dao;
 
 import com.example.hibernatelearn.domain.Book;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-@Component
-public class BookDaoImpl implements BookDao {
-
+public class BookDaoHibernate implements BookDao {
     private final EntityManagerFactory entityManagerFactory;
 
-    public BookDaoImpl(EntityManagerFactory entityManagerFactory) {
+    public BookDaoHibernate(EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
     }
 
 
     @Override
     public List<Book> findAllBooksSortByTitle(Pageable pageable) {
-        return null;
+        EntityManager em = getEntityManager();
+        try{
+            TypedQuery<Book> query = em.createQuery("Select b from Book b", Book.class);
+            query.setFirstResult(Math.toIntExact(pageable.getOffset()));
+            query.setMaxResults(pageable.getPageSize());
+            return query.getResultList();
+        }finally {
+            em.close();
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.example.hibernatelearn.dao;
 
 import com.example.hibernatelearn.domain.Book;
 import com.example.hibernatelearn.repositories.BookRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,8 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> findAllBookSortByTitle(Pageable pageable) {
-        return null;
+        Page<Book> bookPage= bookRepository.findAll(pageable);
+        return bookPage.getContent();
     }
 
     @Override

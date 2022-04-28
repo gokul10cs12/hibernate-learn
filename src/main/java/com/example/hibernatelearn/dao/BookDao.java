@@ -7,6 +7,13 @@ import java.util.List;
 
 public interface BookDao {
 
+    /*
+     *
+     * The findAll(Pageable pageable) method by default returns a Page object.
+     * A Page object provides lots of extra useful information other than just list of employees in current page.
+     *  E.g. A Page object has the number of total pages, number of the current page and well as whether current page is first page or last page.
+     * */
+
     List<Book> findAllBookSortByTitle(Pageable pageable);
 
     List<Book> findAllBook(Pageable pageable);

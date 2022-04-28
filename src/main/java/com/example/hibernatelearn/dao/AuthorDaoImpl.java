@@ -3,10 +3,12 @@ package com.example.hibernatelearn.dao;
 import com.example.hibernatelearn.domain.Author;
 import com.example.hibernatelearn.repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.List;
 
 @Component
 public class AuthorDaoImpl implements AuthorDao{
@@ -19,6 +21,11 @@ public class AuthorDaoImpl implements AuthorDao{
         this.authorRepository = authorRepository;
     }
 
+
+    @Override
+    public List<Author> findAllAuthorByLastName(String lastName, Pageable pageable) {
+        return authorRepository.findAuthorByLastName(lastName, pageable).getContent();
+    }
 
     @Override
     public Author getById(Long id) {

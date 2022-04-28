@@ -24,8 +24,8 @@ class BookDaoImplTest {
 
     @Test
     void testFindBooksSortByTitle(){
-        List<Book> books = bookDao.findAllBook(PageRequest.of(0, 7,
-                Sort.by(Sort.Order.desc("title"))));
+        List<Book> books = bookDao.findAllBookSortByTitle(PageRequest.of(0, 7,
+                Sort.by(Sort.Order.asc("title"))));
         assertThat(books).isNotNull();
         assertThat(books.size()).isEqualTo(7);
     }

@@ -11,8 +11,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,6 +34,17 @@ public class AuthorDAOIntegrationTest {
 
     @Autowired
     BookRepository bookRepository;
+
+
+    @Test
+    void testAuthorByLastNameFindAll(){
+        List<Author> author  = authorDao.findAllAuthorByLastName("Verstappen", PageRequest.of(0,1,
+                Sort.by(Sort.Order.asc("lastName"))));
+        assertThat(author.size()).isEqualTo(1);
+        assertThat(author).isNotNull();
+
+    }
+
 
     @Test
     void testCustomJpaNamedNativeQuery(){

@@ -1,7 +1,9 @@
 package com.example.hibernatelearn.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @AttributeOverrides({
@@ -46,8 +48,27 @@ public class OrderHeader extends BaseEntity {
     private Address shippingAddress;
     @Embedded
     private Address billToAddress;
+    @OneToMany(mappedBy = "orderHeader", cascade = CascadeType.PERSIST)  // One order header can have many orderLine. The MappedBy will define the object of OrderHeader.
+    private Set<OrderLine> orderLines;
     @Enumerated(EnumType.STRING) // EnumType.ORDINAL is the default
     private OrderStatus orderStatus;
+
+    public void addOrderLine(OrderLine orderLine){
+        if (orderLines == null){
+            orderLines = new HashSet<>();
+        }
+        orderLines.add(orderLine);
+        orderLine.setOrderHeader(this);
+    }
+
+    public Set<OrderLine> getOrderLines() {
+        return orderLines;
+    }
+
+    public void setOrderLines(Set<OrderLine> orderLines) {
+        this.orderLines = orderLines;
+    }
+
     public String getCustomer() {
         return customer;
     }

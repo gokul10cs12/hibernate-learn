@@ -32,6 +32,15 @@ class OrderHeaderTest {
 
     Product product;
 
+
+    @Test
+    void testGetCategory(){
+        Product product1 = productRepository.findProductByDescription("PRODUCT1");
+
+        assertNotNull(product1);
+        assertNotNull(product1.getCategories());
+    }
+
     @BeforeEach
     void setUp(){
         Product product1 = new Product();

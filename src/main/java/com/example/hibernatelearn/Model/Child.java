@@ -14,18 +14,16 @@ public class Child {
     private String childName;
 
 
-    private long parentId;
-//
-//    @ManyToOne
-//    Parent parent;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "parent_id")
+    Parent parent;
 
-
-    public long getParentId() {
-        return parentId;
+    public Parent getParent() {
+        return parent;
     }
 
-    public void setParentId(long parentId) {
-        this.parentId = parentId;
+    public void setParent(Parent parent) {
+        this.parent = parent;
     }
 
     public long getId() {

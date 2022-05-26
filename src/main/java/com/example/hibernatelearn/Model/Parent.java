@@ -11,8 +11,16 @@ public class Parent {
     private long id;
     private String parentName;
 
-    @OneToMany
+    @OneToMany(mappedBy = "parent")
     Set<Child> children;
+
+    public Set<Child> getChildren() {
+        return children;
+    }
+
+    public void setChildren(Set<Child> children) {
+        this.children = children;
+    }
 
     public long getId() {
         return id;

@@ -7,6 +7,9 @@ import com.example.hibernatelearn.Repository.ChildRepository;
 import com.example.hibernatelearn.Repository.ParentRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping(path = "/api/")
 public class ChildParentController {
@@ -41,5 +44,25 @@ public class ChildParentController {
     Parent createParentRecord(@RequestBody Parent parent){
         Parent updated = parentRepository.save(parent);
         return updated;
+    }
+
+    @GetMapping(path = "/parent")
+    List<Parent> getAllParents(){
+        return parentRepository.findAll();
+    }
+
+    @GetMapping(path = "/child")
+    List<Child> getAllChildren(){
+        List<Child> children = childRepository.findAll();
+        return children;
+    }
+
+    @GetMapping(path = "/parent/{id}")
+    Optional<Parent> getSingleParent(@PathVariable("id") Long id){
+        return parentRepository.findById(id);
+    }
+    @GetMapping(path = "/child/{id}")
+    Optional<Child> getSingleChild(@PathVariable("id") Long id){
+        return childRepository.findById(id);
     }
 }

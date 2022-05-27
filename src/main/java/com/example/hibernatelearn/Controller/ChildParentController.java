@@ -5,6 +5,7 @@ import com.example.hibernatelearn.Model.Child;
 import com.example.hibernatelearn.Model.Parent;
 import com.example.hibernatelearn.Repository.ChildRepository;
 import com.example.hibernatelearn.Repository.ParentRepository;
+import myPackage.MyTest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,13 +15,21 @@ import java.util.Optional;
 @RequestMapping(path = "/api/")
 public class ChildParentController {
 
+    private final MyTest myTest;
+
     private final ChildRepository childRepository;
 
     private final ParentRepository parentRepository;
 
-    public ChildParentController(ChildRepository childRepository, ParentRepository parentRepository) {
+    public ChildParentController(MyTest myTest, ChildRepository childRepository, ParentRepository parentRepository) {
+        this.myTest = myTest;
         this.childRepository = childRepository;
         this.parentRepository = parentRepository;
+    }
+
+    @GetMapping(path = "/myTest")
+    String getMyTest(){
+        return myTest.testPrint();
     }
 
 

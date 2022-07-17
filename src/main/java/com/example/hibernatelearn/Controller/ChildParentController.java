@@ -51,8 +51,8 @@ public class ChildParentController {
 
     @PostMapping(path = "/parent")
     Parent createParentRecord(@RequestBody Parent parent){
-        Parent updated = parentRepository.save(parent);
-        return updated;
+
+        return parentRepository.save(parent);
     }
 
     @GetMapping(path = "/parent")
@@ -68,6 +68,7 @@ public class ChildParentController {
 
     @GetMapping(path = "/parent/{id}")
     Optional<Parent> getSingleParent(@PathVariable("id") Long id){
+
         return parentRepository.findById(id);
     }
     @GetMapping(path = "/child/{id}")

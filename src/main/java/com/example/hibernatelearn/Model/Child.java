@@ -1,5 +1,7 @@
 package com.example.hibernatelearn.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -14,9 +16,13 @@ public class Child {
     private String childName;
 
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @JsonBackReference
+    @ManyToOne
     @JoinColumn(name = "parent_id")
     Parent parent;
+
+    public Child(String childName) {
+    }
 
     public Parent getParent() {
         return parent;
@@ -42,5 +48,6 @@ public class Child {
         this.childName = childName;
     }
 
-
+    public Child() {
+    }
 }
